@@ -1,0 +1,21 @@
+{
+  "generalOptions": "一般オプション",
+  "quality": "品質",
+  "qualityDescription": "出力画像の品質\n品質が高いほどファイルサイズが大きくなる",
+  "quantization": "量子化",
+  "quantizationDescription": "量化値は画像の色彩と細部に影響します\n値が高いほど色彩と細部が豊かになる",
+  "dithering": "ディザリング",
+  "ditheringDescription": "量子化や圧縮によって引き起こされる色の\nバンディングを減らすためにノイズを追加するプロセス",
+  "resize": "サイズ変更",
+  "width": "幅",
+  "height": "高さ",
+  "filter": "ﾌｨﾙﾀ",
+  "filterDescription": "画像のサイズ変更に\n使用されるアルゴリズム",
+  "threads": "スレッド数",
+  "threadsDescription": "画像処理スレッド数\n範囲: CPUコア数",
+  "outputSettings": "出力設定",
+  "backup": "バックアップ",
+  "recursive": "フォルダ構造保持",
+  "format": "フォーマット",
+  "savePath": "保存パス"
+}

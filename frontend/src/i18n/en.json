@@ -1,0 +1,21 @@
+{
+  "generalOptions": "General Options",
+  "quality": "Quality",
+  "qualityDescription": "Quality of the output image\nHigher quality means larger file size",
+  "quantization": "Quantization",
+  "quantizationDescription": "The degree of color and detail preservation\n Higher values mean richer colors and details",
+  "dithering": "Dithering",
+  "ditheringDescription": "The process of adding noise to smooth color transitions\nand reduce color banding caused by quantization or compression",
+  "resize": "Resize",
+  "width": "Width",
+  "height": "Height",
+  "filter": "Filter",
+  "filterDescription": "Algorithm used to resize the image",
+  "threads": "Threads",
+  "threadsDescription": "Used to process images\nRange: Number of cpu cores",
+  "outputSettings": "Output Settings",
+  "backup": "Backup",
+  "recursive": "Recursive",
+  "format": "Format",
+  "savePath": "Save Path"
+}

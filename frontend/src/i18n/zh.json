@@ -1,0 +1,21 @@
+{
+  "generalOptions": "通用选项",
+  "quality": "质量",
+  "qualityDescription": "输出图像的质量\n更高的质量意味着更大的文件大小",
+  "quantization": "量化",
+  "quantizationDescription": "颜色和细节的保留程度\n值越高，颜色和细节越丰富",
+  "dithering": "抖动",
+  "ditheringDescription": "通过添加噪声来平滑颜色过渡\n并减少由量化或压缩引起的颜色条纹",
+  "resize": "调整大小",
+  "width": "宽度",
+  "height": "高度",
+  "filter": "算法",
+  "filterDescription": "用于调整图像大小的算法",
+  "threads": "线程数",
+  "threadsDescription": "处理图像线程数\n推荐范围：CPU核心数",
+  "outputSettings": "输出设置",
+  "backup": "备份",
+  "recursive": "源文件目录下保存",
+  "format": "格式",
+  "savePath": "保存路径"
+}
