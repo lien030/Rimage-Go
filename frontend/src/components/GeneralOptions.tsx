@@ -163,7 +163,7 @@ function GeneralOptions({
           {/* Resize */}
           <div className="w-52 flex flex-col border gap-1.5 border-zinc-300 rounded-lg bg-background/30 p-3">
             <div className="flex justify-between mb-1">
-              <p>{t("resize")}</p>
+              <p className="select-none">{t("resize")}</p>
               <Switch
                 defaultChecked={rimageConfig.current.resize}
                 onCheckedChange={(checked) => {
