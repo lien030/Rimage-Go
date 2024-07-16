@@ -14,8 +14,8 @@
   "threads": "Threads",
   "threadsDescription": "Used to process images\nRange: Number of cpu cores",
   "outputSettings": "Output Settings",
-  "backup": "Backup",
+  "backup": "Backup source file",
   "recursive": "Recursive",
   "format": "Format",
-  "savePath": "Save Path"
+  "selectDirectory": "Select Dir"
 }

@@ -14,8 +14,8 @@
   "threads": "スレッド数",
   "threadsDescription": "画像処理スレッド数\n範囲: CPUコア数",
   "outputSettings": "出力設定",
-  "backup": "バックアップ",
+  "backup": "元ファイルをバックアップ",
   "recursive": "フォルダ構造保持",
   "format": "フォーマット",
-  "savePath": "保存パス"
+  "selectDirectory": "パス指定"
 }

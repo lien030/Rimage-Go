@@ -25,12 +25,12 @@ func main() {
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:             "Rimage",
-		Width:             760,
-		Height:            480,
-		MinWidth:          760,
-		MinHeight:         480,
-		MaxWidth:          760,
-		MaxHeight:         480,
+		Width:             840,
+		Height:            560,
+		MinWidth:          840,
+		MinHeight:         560,
+		MaxWidth:          840,
+		MaxHeight:         560,
 		DisableResize:     true,
 		Fullscreen:        false,
 		Frameless:         true,

@@ -20,4 +20,6 @@ export interface RimageConfig {
   recursive: boolean;
   format: OutputFormat;
   outputDir: string;
+  isResize: boolean;
+  running: boolean;
 }

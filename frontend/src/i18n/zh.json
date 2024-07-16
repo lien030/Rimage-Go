@@ -14,8 +14,8 @@
   "threads": "线程数",
   "threadsDescription": "处理图像线程数\n推荐范围：CPU核心数",
   "outputSettings": "输出设置",
-  "backup": "备份",
+  "backup": "备份源文件",
   "recursive": "源文件目录下保存",
   "format": "格式",
-  "savePath": "保存路径"
+  "selectDirectory": "选择目录"
 }
