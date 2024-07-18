@@ -14,8 +14,11 @@
   "threads": "スレッド数",
   "threadsDescription": "画像処理スレッド数\n範囲: CPUコア数",
   "outputSettings": "出力設定",
-  "backup": "元ファイルをバックアップ",
-  "recursive": "フォルダ構造保持",
+  "backup": "元ﾌｧｲﾙをﾊﾞｯｸｱｯﾌﾟ",
+  "recursive": "同フォルダに保存",
+  "recursiveDescription": "出力ファイルを保存するときに\nフォルダ構造を保持する",
   "format": "フォーマット",
-  "selectDirectory": "パス指定"
+  "selectDirectory": "パス指定",
+  "pathError": "なんと！無効なパスって",
+  "pathErrorDescription": "パスを確認してもう一度試してみましょう"
 }

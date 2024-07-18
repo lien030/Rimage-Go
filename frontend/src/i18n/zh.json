@@ -15,7 +15,11 @@
   "threadsDescription": "处理图像线程数\n推荐范围：CPU核心数",
   "outputSettings": "输出设置",
   "backup": "备份源文件",
+  "backupDescription": "在输入文件扩展名后添加\".backup\"后缀",
   "recursive": "源文件目录下保存",
+  "recursiveDescription": "保留文件夹结构",
   "format": "格式",
-  "selectDirectory": "选择目录"
+  "selectDirectory": "选择目录",
+  "pathError": "哇！是无效路径",
+  "pathErrorDescription": "检查一下路径吧~"
 }

@@ -17,6 +17,7 @@
     "@radix-ui/react-slider": "^1.2.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
@@ -26,7 +27,8 @@
     "react-dom": "^18.2.0",
     "react-i18next": "^14.1.2",
     "tailwind-merge": "^1.13.2",
-    "tailwindcss-animate": "^1.0.6"
+    "tailwindcss-animate": "^1.0.6",
+    "valtio": "^1.13.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

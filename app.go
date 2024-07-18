@@ -3,11 +3,19 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
+}
+
+type DirectoryPickerResponse struct {
+	Result bool   `json:"result"`
+	Dir    string `json:"dir"`
 }
 
 // NewApp creates a new App application struct
@@ -41,4 +49,36 @@ func (a *App) shutdown(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+// Check directory exists
+func (a *App) IsDirectory(dir string) bool {
+	fileInfo, err := os.Stat(dir)
+	if err != nil {
+		return false
+	}
+	return fileInfo.IsDir()
+}
+
+func (a *App) DirectoryPicker() DirectoryPickerResponse {
+	options := runtime.OpenDialogOptions{
+		// Title: title,
+	}
+	dir, err := runtime.OpenDirectoryDialog(a.ctx, options)
+	if err != nil {
+		return DirectoryPickerResponse{
+			Result: false,
+			Dir:    dir,
+		}
+	}
+	if dir == "" {
+		return DirectoryPickerResponse{
+			Result: false,
+			Dir:    dir,
+		}
+	}
+	return DirectoryPickerResponse{
+		Result: true,
+		Dir:    dir,
+	}
 }
