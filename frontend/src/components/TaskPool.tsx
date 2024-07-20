@@ -1,7 +1,7 @@
 import { CookingPot, ImageUp, Plus, ScrollText, X } from "lucide-react";
 import { OnFileDrop, OnFileDropOff } from "../../wailsjs/runtime/runtime";
 import { useTranslation } from "react-i18next";
-import { FileNameParser, FilePicker } from "../../wailsjs/go/main/App";
+import { ParseFileName, FilePicker } from "../../wailsjs/go/main/App";
 import { useEffect } from "react";
 import { Button } from "./ui/button";
 import { Task } from "@/type";
@@ -14,32 +14,32 @@ export default function TaskPool() {
   const config = useRimageConfig();
 
   useEffect(() => {
-    const callback = async (x: number, y: number, paths: string[]) => {
+    const handleFileDrop = async (x: number, y: number, paths: string[]) => {
       console.log(x, y);
-      config.tasks = await arrayMerge({
-        orgTasks: config.tasks,
-        pathList: paths,
+      config.tasks = await mergeTasks({
+        currentTasks: config.tasks,
+        newPaths: paths,
       });
     };
-    OnFileDrop(callback, true);
+    OnFileDrop(handleFileDrop, true);
     return () => OnFileDropOff();
   }, []);
 
-  async function arrayMerge({
-    orgTasks,
-    pathList,
+  async function mergeTasks({
+    currentTasks,
+    newPaths,
   }: {
-    orgTasks: Task[];
-    pathList: string[];
+    currentTasks: Task[];
+    newPaths: string[];
   }): Promise<Task[]> {
     // deduplicate
-    pathList = pathList.filter((path) => {
-      return !orgTasks.some((task) => task.filePath === path);
+    newPaths = newPaths.filter((path) => {
+      return !currentTasks.some((task) => task.filePath === path);
     });
 
-    const data: Task[] = await Promise.all(
-      pathList.map(async (path) => {
-        const fileName = await FileNameParser(path);
+    const tasks: Task[] = await Promise.all(
+      newPaths.map(async (path) => {
+        const fileName = await ParseFileName(path);
         return {
           id: short.generate(),
           status: "awaiting",
@@ -49,64 +49,54 @@ export default function TaskPool() {
       })
     );
 
-    // check data mime type is image
-    const validData = data.filter((task) => {
+    // filter out non-image files
+    const validTasks = tasks.filter((task) => {
       const mimeType = mime.getType(task.fileName);
-      if (mimeType) {
-        return mimeType.includes("image");
-      }
-      return false;
+      return mimeType ? mimeType.includes("image") : false;
     });
 
-    const res = orgTasks.concat(validData);
-    return res;
+    return currentTasks.concat(validTasks);
   }
 
-  async function onAddTask() {
+  async function handleAddTask() {
     const response = await FilePicker();
     if (response.result) {
-      config.tasks = await arrayMerge({
-        orgTasks: config.tasks,
-        pathList: response.files,
+      config.tasks = await mergeTasks({
+        currentTasks: config.tasks,
+        newPaths: response.files,
       });
     }
   }
 
-  function onClear() {
+  function handleClear() {
     console.log("Clearing tasks");
     config.tasks = [];
   }
 
-  function onDeleteTask(id: string) {
+  function handleDeleteTask(id: string) {
     config.tasks = config.tasks.filter((task) => task.id !== id);
   }
 
-  function GenerateTasks({ tasks }: { tasks: Task[] }) {
-    return tasks.map((task) => {
-      return (
-        <div
-          className="w-full py-1 grid grid-cols-[300px,auto] rounded-md hover:bg-muted-foreground/5 transition-all select-none"
-          key={task.id}
-        >
-          <div className="flex items-center px-2">
-            <p className="w-full text-sm text-nowrap truncate">
-              {task.fileName}
-            </p>
-          </div>
-          <div className="flex justify-center items-center">
-            <Button
-              className="w-4 h-4 bg-transparent hover:bg-transparent"
-              size={"icon"}
-              onClick={() => {
-                onDeleteTask(task.id);
-              }}
-            >
-              <X size={16} className="text-primary" />
-            </Button>
-          </div>
+  function TaskList({ tasks }: { tasks: Task[] }) {
+    return tasks.map((task) => (
+      <div
+        className="w-full py-1 grid grid-cols-[300px,auto] rounded-md hover:bg-muted-foreground/5 transition-all select-none"
+        key={task.id}
+      >
+        <div className="flex items-center px-2">
+          <p className="w-full text-sm text-nowrap truncate">{task.fileName}</p>
         </div>
-      );
-    });
+        <div className="flex justify-center items-center">
+          <Button
+            className="w-4 h-4 bg-transparent hover:bg-transparent"
+            size={"icon"}
+            onClick={() => handleDeleteTask(task.id)}
+          >
+            <X size={16} className="text-primary" />
+          </Button>
+        </div>
+      </div>
+    ));
   }
 
   return (
@@ -119,14 +109,14 @@ export default function TaskPool() {
         <div className="flex gap-2 -my-4">
           <Button
             size={"icon"}
-            onClick={onAddTask}
+            onClick={handleAddTask}
             className="text-muted-foreground border h-7 w-12 rounded-lg"
           >
             <Plus size={16} className="text-white" />
           </Button>
           <Button
             size={"icon"}
-            onClick={onClear}
+            onClick={handleClear}
             className="text-muted-foreground bg-background hover:bg-muted-foreground/10 border h-7 w-10 rounded-lg"
           >
             <CookingPot size={16} />
@@ -151,7 +141,7 @@ export default function TaskPool() {
           <p className="text-sm select-none">{t("dragAndDrop")}</p>
         </div>
         {/* Content */}
-        <GenerateTasks tasks={config.tasks} />
+        <TaskList tasks={config.tasks} />
       </div>
     </>
   );

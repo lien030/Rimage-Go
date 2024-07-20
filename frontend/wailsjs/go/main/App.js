@@ -6,10 +6,6 @@ export function DirectoryPicker() {
   return window['go']['main']['App']['DirectoryPicker']();
 }
 
-export function FileNameParser(arg1) {
-  return window['go']['main']['App']['FileNameParser'](arg1);
-}
-
 export function FilePicker() {
   return window['go']['main']['App']['FilePicker']();
 }
@@ -20,4 +16,8 @@ export function Greet(arg1) {
 
 export function IsDirectory(arg1) {
   return window['go']['main']['App']['IsDirectory'](arg1);
+}
+
+export function ParseFileName(arg1) {
+  return window['go']['main']['App']['ParseFileName'](arg1);
 }

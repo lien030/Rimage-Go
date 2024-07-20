@@ -100,6 +100,6 @@ func (a *App) FilePicker() FilesPickerResponse {
 	}
 }
 
-func (a *App) FileNameParser(path string) string {
+func (a *App) ParseFileName(path string) string {
 	return filepath.Base(path)
 }
