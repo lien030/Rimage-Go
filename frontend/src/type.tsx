@@ -22,4 +22,12 @@ export interface RimageConfig {
   outputDir: string;
   isResize: boolean;
   running: boolean;
+  tasks: Task[];
+}
+
+export interface Task {
+  id: string;
+  status: "pending" | "awaiting" | "running" | "completed" | "failed";
+  filePath: string;
+  fileName: string;
 }

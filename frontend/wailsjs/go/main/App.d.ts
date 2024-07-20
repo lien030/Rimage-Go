@@ -4,6 +4,10 @@ import {main} from '../models';
 
 export function DirectoryPicker():Promise<main.DirectoryPickerResponse>;
 
+export function FileNameParser(arg1:string):Promise<string>;
+
+export function FilePicker():Promise<main.FilesPickerResponse>;
+
 export function Greet(arg1:string):Promise<string>;
 
 export function IsDirectory(arg1:string):Promise<boolean>;

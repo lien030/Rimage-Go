@@ -17,6 +17,7 @@ export const defaultData: RimageConfig = {
   outputDir: "~/Downloads/Downloads/Downloads/Downloads/Downloads/Downloads",
   isResize: false,
   running: false,
+  tasks: [],
 };
 
 const rimageConfig = proxy(defaultData);

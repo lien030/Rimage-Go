@@ -3,6 +3,7 @@ import TopBar from "./components/TopBar";
 import "./i18n/config";
 import GeneralOptions from "./components/GeneralOptions";
 import OutputSettings from "./components/OutputSettings";
+import TaskPool from "./components/TaskPool";
 
 function App() {
   // const { t } = useTranslation();
@@ -14,6 +15,9 @@ function App() {
         <div className="flex flex-col gap-4">
           <GeneralOptions />
           <OutputSettings />
+        </div>
+        <div className="flex flex-col gap-4 pr-4 grow">
+          <TaskPool />
         </div>
       </div>
     </div>

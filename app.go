@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -16,6 +17,11 @@ type App struct {
 type DirectoryPickerResponse struct {
 	Result bool   `json:"result"`
 	Dir    string `json:"dir"`
+}
+
+type FilesPickerResponse struct {
+	Result bool     `json:"result"`
+	Files  []string `json:"files"`
 }
 
 // NewApp creates a new App application struct
@@ -61,10 +67,7 @@ func (a *App) IsDirectory(dir string) bool {
 }
 
 func (a *App) DirectoryPicker() DirectoryPickerResponse {
-	options := runtime.OpenDialogOptions{
-		// Title: title,
-	}
-	dir, err := runtime.OpenDirectoryDialog(a.ctx, options)
+	dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{})
 	if err != nil {
 		return DirectoryPickerResponse{
 			Result: false,
@@ -81,4 +84,22 @@ func (a *App) DirectoryPicker() DirectoryPickerResponse {
 		Result: true,
 		Dir:    dir,
 	}
+}
+
+func (a *App) FilePicker() FilesPickerResponse {
+	files, err := runtime.OpenMultipleFilesDialog(a.ctx, runtime.OpenDialogOptions{})
+	if err != nil {
+		return FilesPickerResponse{
+			Result: false,
+			Files:  files,
+		}
+	}
+	return FilesPickerResponse{
+		Result: len(files) > 0,
+		Files:  files,
+	}
+}
+
+func (a *App) FileNameParser(path string) string {
+	return filepath.Base(path)
 }

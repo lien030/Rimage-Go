@@ -12,7 +12,7 @@
   "filter": "算法",
   "filterDescription": "用于调整图像大小的算法",
   "threads": "线程数",
-  "threadsDescription": "处理图像线程数\n推荐范围：CPU核心数",
+  "threadsDescription": "处理单个图像线程数\n推荐范围：CPU核心数",
   "outputSettings": "输出设置",
   "backup": "备份源文件",
   "backupDescription": "在输入文件扩展名后添加\".backup\"后缀",
@@ -21,5 +21,8 @@
   "format": "格式",
   "selectDirectory": "选择目录",
   "pathError": "哇！是无效路径",
-  "pathErrorDescription": "检查一下路径吧~"
+  "pathErrorDescription": "检查一下路径吧~",
+  "taskpool": "任务池",
+  "dragAndDrop": "拖拽图片到此处",
+  "clear": "清空"
 }

@@ -33,7 +33,7 @@ export default function GeneralOptions() {
         <Settings2 className="text-primary" strokeWidth={1.8} size={24} />
         <p className="font-bold tracking-wide">{t("generalOptions")}</p>
       </div>
-      <div className="flex gap-2 px-6">
+      <div className="flex gap-2 px-4">
         {/* Quality */}
         <div className="w-52 h-64 flex flex-col justify-around border border-zinc-300 rounded-lg bg-background/30">
           <CustomSlider

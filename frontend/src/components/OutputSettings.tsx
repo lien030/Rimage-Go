@@ -77,6 +77,7 @@ function OutputSettings() {
           className="w-24 bg-muted-foreground/5 border-zinc-300 hover:bg-muted-foreground/10"
           variant={"outline"}
           onClick={onSelectedDir}
+          disabled={config.recursive}
         >
           {t("selectDirectory")}
         </Button>
@@ -90,7 +91,7 @@ function OutputSettings() {
         <FolderOutput className="text-primary" strokeWidth={1.8} size={24} />
         <p className="font-bold tracking-wide">{t("outputSettings")}</p>
       </div>
-      <div className="w-full h-12 px-6 pb-6 grow ">
+      <div className="w-full h-12 px-4 pb-5 grow ">
         <div className="w-full h-full flex flex-col justify-between border border-zinc-300 rounded-lg bg-background/30 p-3">
           <div className="w-full grow grid grid-cols-2">
             <div className="flex flex-col gap-2">

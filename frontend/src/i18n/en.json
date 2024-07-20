@@ -12,7 +12,7 @@
   "filter": "Filter",
   "filterDescription": "Algorithm used to resize the image",
   "threads": "Threads",
-  "threadsDescription": "Used to process images\nRange: Number of cpu cores",
+  "threadsDescription": "Used to process single image\nRange: Number of cpu cores",
   "outputSettings": "Output Settings",
   "backup": "Backup source file",
   "backupDescription": "Appends \".backup\" suffix\nto input file(s) extension",
@@ -21,5 +21,8 @@
   "format": "Format",
   "selectDirectory": "Select Dir",
   "pathError": "Uh oh! That path is invalid",
-  "pathErrorDescription": "Let's check the path and try again"
+  "pathErrorDescription": "Let's check the path and try again",
+  "taskpool": "Taskpool",
+  "dragAndDrop": "Drag and drop images here",
+  "clear": "Clear"
 }

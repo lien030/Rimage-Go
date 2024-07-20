@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.wails-drop-target-active {
-  background-color: rgb(0, 0, 255) !important;
+.wails-drop-target-active div.drop-mask{
+  display: flex;
 }
 
 @layer base {
