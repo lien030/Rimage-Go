@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import useRimageConfig from "@/State";
 import { Input } from "./ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { IsDirectory, DirectoryPicker } from "../../wailsjs/go/main/App";
+import { IsDirectory, DirectoryPicker, GetUserDownloadsDir } from "../../wailsjs/go/main/App";
 import {
   Select,
   SelectContent,
@@ -15,11 +15,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { OutputFormat } from "@/type";
+import { useEffect } from "react";
 
 function OutputSettings() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const config = useRimageConfig();
+
+  useEffect(()=>{
+    const setDefaultOutputDir = async () => {
+      const path = await GetUserDownloadsDir();
+      if(path) {
+        config.outputDir = path.dir;
+      }
+    }
+    setDefaultOutputDir();
+  },[])
 
   function CustomDirPicker({
     directory,
@@ -91,10 +102,10 @@ function OutputSettings() {
         <FolderOutput className="text-primary" strokeWidth={1.8} size={24} />
         <p className="font-bold tracking-wide">{t("outputSettings")}</p>
       </div>
-      <div className="w-full h-12 px-4 pb-5 grow ">
+      <div className="w-full h-12 px-4 pb-4 grow ">
         <div className="w-full h-full flex flex-col justify-between border border-zinc-300 rounded-lg bg-background/30 p-3">
           <div className="w-full grow grid grid-cols-2">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="backupCheckbox"

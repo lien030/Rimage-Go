@@ -4,6 +4,8 @@ import "./i18n/config";
 import GeneralOptions from "./components/GeneralOptions";
 import OutputSettings from "./components/OutputSettings";
 import TaskPool from "./components/TaskPool";
+import Workers from "./components/Workers";
+import ControlPanel from "./components/ControlPanel";
 
 function App() {
   // const { t } = useTranslation();
@@ -18,6 +20,8 @@ function App() {
         </div>
         <div className="flex flex-col gap-4 pr-4 grow">
           <TaskPool />
+          <Workers />
+          <ControlPanel />
         </div>
       </div>
     </div>

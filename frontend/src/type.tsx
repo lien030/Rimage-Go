@@ -27,7 +27,13 @@ export interface RimageConfig {
 
 export interface Task {
   id: string;
-  status: "pending" | "awaiting" | "running" | "completed" | "failed";
+  status: "awaiting" | "running" | "completed" | "failed";
   filePath: string;
   fileName: string;
+}
+
+export interface ProcessWorker {
+  id: string;
+  status: "idle" | "running" | "failed";
+  task?: Task;
 }

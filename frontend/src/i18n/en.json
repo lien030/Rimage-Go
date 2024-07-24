@@ -24,5 +24,6 @@
   "pathErrorDescription": "Let's check the path and try again",
   "taskpool": "Taskpool",
   "dragAndDrop": "Drag and drop images here",
-  "clear": "Clear"
+  "clear": "Clear",
+  "workers": "Workers"
 }

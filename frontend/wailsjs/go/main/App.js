@@ -10,6 +10,10 @@ export function FilePicker() {
   return window['go']['main']['App']['FilePicker']();
 }
 
+export function GetUserDownloadsDir() {
+  return window['go']['main']['App']['GetUserDownloadsDir']();
+}
+
 export function Greet(arg1) {
   return window['go']['main']['App']['Greet'](arg1);
 }
@@ -18,6 +22,18 @@ export function IsDirectory(arg1) {
   return window['go']['main']['App']['IsDirectory'](arg1);
 }
 
+export function NewWorker(arg1) {
+  return window['go']['main']['App']['NewWorker'](arg1);
+}
+
 export function ParseFileName(arg1) {
   return window['go']['main']['App']['ParseFileName'](arg1);
+}
+
+export function RemoveWorker(arg1) {
+  return window['go']['main']['App']['RemoveWorker'](arg1);
+}
+
+export function SetTaskChannel(arg1) {
+  return window['go']['main']['App']['SetTaskChannel'](arg1);
 }

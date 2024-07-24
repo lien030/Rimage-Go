@@ -24,5 +24,6 @@
   "pathErrorDescription": "检查一下路径吧~",
   "taskpool": "任务池",
   "dragAndDrop": "拖拽图片到此处",
-  "clear": "清空"
+  "clear": "清空",
+  "workers": "打工仔"
 }

@@ -23,5 +23,6 @@
   "pathErrorDescription": "パスを確認してもう一度試してみましょう",
   "taskpool": "タスクプール",
   "dragAndDrop": "ここに画像をドラッグアンドドロップ",
-  "clear": "クリア"
+  "clear": "クリア",
+  "workers": "ワーカー"
 }
