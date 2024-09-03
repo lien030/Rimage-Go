@@ -74,6 +74,8 @@ function OutputSettings() {
           description: t("pathErrorDescription"),
           duration: 2500,
         });
+      }else {
+        config.outputDir = e.target.value;
       }
     }
 
@@ -165,6 +167,10 @@ function OutputSettings() {
                   defaultValue={config.suffix}
                   onBlur={(e) => {
                     const suffix = e.target.value;
+                    if(suffix === ""){
+                      config.suffix = suffix;
+                      return;
+                    }
                     const valid = isValidFilename(suffix);
                     if (valid) {
                       config.suffix = suffix;

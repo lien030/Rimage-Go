@@ -20,8 +20,9 @@ export default function TaskPool() {
   const config = useRimageConfig();
 
   useEffect(() => {
-    const handleFileDrop = async (x: number, y: number, paths: string[]) => {
-      console.log(x, y);
+    const handleFileDrop = async (_x: number, _y: number, paths: string[]) => {
+      // console.log(x, y);
+      if (!paths || paths.length === 0) return;
       config.tasks = await mergeTasks({
         currentTasks: config.tasks,
         newPaths: paths,

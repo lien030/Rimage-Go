@@ -63,7 +63,7 @@ type RimageParams struct {
 	OutputDir    string `json:"outputDir"`
 }
 
-var tasksChan = make(chan Task, 1024)
+var tasksChan = make(chan Task, 2048)
 var goroutines = make(map[string]*ControlledGoroutine)
 var wg sync.WaitGroup
 
@@ -200,9 +200,11 @@ func (a *App) SetTaskChannel(tasks []Task) bool {
 }
 
 func (a *App) ClearTaskChannel() bool {
-	for len(tasksChan) > 0 {
-		<-tasksChan
-	}
+	go func() {
+		for len(tasksChan) > 0 {
+			<-tasksChan
+		}
+	}()
 	return true
 }
 
