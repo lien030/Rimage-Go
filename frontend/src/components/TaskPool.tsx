@@ -1,5 +1,10 @@
 import { CookingPot, ImageUp, Plus, ScrollText, X } from "lucide-react";
-import { OnFileDrop, OnFileDropOff } from "../../wailsjs/runtime/runtime";
+import {
+  EventsOff,
+  EventsOn,
+  OnFileDrop,
+  OnFileDropOff,
+} from "../../wailsjs/runtime/runtime";
 import { useTranslation } from "react-i18next";
 import { ParseFileName, FilePicker } from "../../wailsjs/go/main/App";
 import { useEffect } from "react";
@@ -8,6 +13,7 @@ import { Task } from "@/type";
 import useRimageConfig from "@/State";
 import short from "short-uuid";
 import mime from "mime";
+import { ClearTaskChannel, SetTaskChannel } from "../../wailsjs/go/main/App";
 
 export default function TaskPool() {
   const { t } = useTranslation();
@@ -20,9 +26,20 @@ export default function TaskPool() {
         currentTasks: config.tasks,
         newPaths: paths,
       });
+      if(config.running){
+        ClearTaskChannel();
+        SetTaskChannel(config.tasks);
+      }
     };
     OnFileDrop(handleFileDrop, true);
-    return () => OnFileDropOff();
+    EventsOn("removeTask", (id: string) => {
+      console.log("Removing task", id);
+      handleDeleteTask(id);
+    });
+    return () => {
+      OnFileDropOff();
+      EventsOff("removeTask");
+    };
   }, []);
 
   async function mergeTasks({
@@ -65,6 +82,10 @@ export default function TaskPool() {
         currentTasks: config.tasks,
         newPaths: response.files,
       });
+      if(config.running){
+        ClearTaskChannel();
+        SetTaskChannel(config.tasks);
+      }
     }
   }
 

@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -62,6 +63,7 @@ func (a *App) startup(ctx context.Context) {
 // domReady is called after front-end resources have been loaded
 func (a App) domReady(ctx context.Context) {
 	// Add your action here
+	// go testPrintTask(ctx)
 }
 
 // beforeClose is called when the application is about to quit,
@@ -145,7 +147,15 @@ func (a *App) GetUserDownloadsDir() DirectoryPickerResponse {
 
 func (a *App) SetTaskChannel(tasks []Task) bool {
 	for _, task := range tasks {
+		fmt.Printf("Adding task %s to channel, fileName: %s\n", task.ID, task.FileName)
 		tasksChan <- task
+	}
+	return true
+}
+
+func (a *App) ClearTaskChannel() bool {
+	for len(tasksChan) > 0 {
+		<-tasksChan
 	}
 	return true
 }
@@ -157,14 +167,14 @@ func NewControlledGoroutine(id string, cancel context.CancelFunc) *ControlledGor
 	}
 }
 
-func startGoroutine(id string) {
+func (a *App) startGoroutine(id string) {
 	ctx, cancel := context.WithCancel(context.Background())
 	goroutine := NewControlledGoroutine(id, cancel)
 	goroutines[id] = goroutine
 	goroutine.Running = true
 
 	wg.Add(1)
-	go imageProcessWorker(id, ctx)
+	go a.imageProcessWorker(id, ctx)
 }
 
 func stopGoroutine(id string) {
@@ -174,25 +184,26 @@ func stopGoroutine(id string) {
 	}
 }
 
-func imageProcessWorker(id string, ctx context.Context) {
-	select {
-	case task := <-tasksChan:
-		fmt.Printf("Worker %s is processing task %s\n", id, task.ID)
-		processImage(task)
-	case <-ctx.Done():
-		wg.Done()
-		fmt.Printf("Worker %s is Done.\n", id)
-		return
+func (a *App) imageProcessWorker(workerId string, workerCtx context.Context) {
+	for {
+		select {
+		case task := <-tasksChan:
+			fmt.Printf("Worker %s is processing task %s\n", workerId, task.ID)
+			a.setWorkerStatus(workerId, "running", task)
+			processImage(task)
+			a.setWorkerStatus(workerId, "idle", task)
+			a.removeFrontendTask(task)
+			fmt.Println("Tasks channel length: ", len(tasksChan))
+		case <-workerCtx.Done():
+			wg.Done()
+			fmt.Printf("Worker %s is Done.\n", workerId)
+			return
+		}
 	}
 }
 
-func processImage(task Task) {
-	// Process image
-	fmt.Printf("Processing image %s\n", task.FileName)
-}
-
 func (a *App) NewWorker(worker ProcessWorker) bool {
-	startGoroutine(worker.ID)
+	a.startGoroutine(worker.ID)
 	fmt.Println("goroutines length: ", len(goroutines))
 	return true
 }
@@ -200,4 +211,18 @@ func (a *App) NewWorker(worker ProcessWorker) bool {
 func (a *App) RemoveWorker(id string) bool {
 	stopGoroutine(id)
 	return true
+}
+
+func processImage(task Task) {
+	// Process image
+	fmt.Printf("Processing image %s\n", task.FileName)
+	time.Sleep(3 * time.Second)
+}
+
+func (a *App) setWorkerStatus(workerId string, status string, task Task) {
+	runtime.EventsEmit(a.ctx, "setWorkerStatus", workerId, status, task)
+}
+
+func (a *App) removeFrontendTask(task Task) {
+	runtime.EventsEmit(a.ctx, "removeTask", task.ID)
 }

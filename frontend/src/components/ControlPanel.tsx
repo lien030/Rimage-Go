@@ -1,12 +1,21 @@
 import { Square, Play } from "lucide-react";
 import { Button } from "./ui/button";
 import useRimageConfig from "@/State";
+import { ClearTaskChannel, SetTaskChannel } from "../../wailsjs/go/main/App";
 
 export default function ControlPanel() {
   const config = useRimageConfig();
 
   function handleButtonClick() {
-    config.running = !config.running;
+    if (config.running === false) {
+      // start the process
+      SetTaskChannel(config.tasks);
+      config.running = true;
+    }else if(config.running === true){
+      // stop the process
+      ClearTaskChannel();
+      config.running = false;
+    }
   }
 
   return (

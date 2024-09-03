@@ -34,6 +34,6 @@ export interface Task {
 
 export interface ProcessWorker {
   id: string;
-  status: "idle" | "running" | "failed";
+  status: "sleeping" | "idle" | "working" | "failed";
   task?: Task;
 }

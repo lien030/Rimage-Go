@@ -1,4 +1,4 @@
-import { Minus, Pickaxe, Plus, Smile } from "lucide-react";
+import { Minus, Pickaxe, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { ProcessWorker, Task } from "@/type";
@@ -6,11 +6,29 @@ import { useWorkerConfig } from "@/State";
 import shortUUID from "short-uuid";
 import { NewWorker, RemoveWorker } from "../../wailsjs/go/main/App";
 import { useToast } from "./ui/use-toast";
+import { EventsOff, EventsOn } from "../../wailsjs/runtime";
+import { useEffect } from "react";
 
 export default function Workers() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const workersList = useWorkerConfig();
+
+  useEffect(()=>{
+    EventsOn("setWorkerStatus", (workerId: string, status: string, task: Task) => {
+      // console.log(workerId, status, task);
+      const worker = workersList.find((worker) => worker.id === workerId);
+      if (worker) {
+        worker.status = status as "idle" | "working";
+        worker.task = status === "idle" ? undefined : task;
+      }
+    });
+    return ()=>{
+      EventsOff("setWorkerStatus");
+    }
+  },[])
+
+
   async function handleAddWorker() {
     // workersList.push({ id: shortUUID.generate(), status: "idle" });
     const newWorker: ProcessWorker = {
@@ -27,9 +45,7 @@ export default function Workers() {
         filePath: "",
         fileName: "",
       },
-      convertValues: function (_a: any, _classs: any, _asMap?: boolean) {
-        throw new Error("Function not implemented.");
-      }
+      convertValues: () => {},
     });
     if (response) {
       workersList.push(newWorker);
@@ -118,7 +134,7 @@ function WorkerCard({ worker }: { worker?: ProcessWorker }) {
     if (!task && worker?.status === "idle") {
       return (
         <p className="w-full text-sm text-nowrap truncate">
-          <Smile size={20} className="text-primary" />
+          😴
         </p>
       );
     }
