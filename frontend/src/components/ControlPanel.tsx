@@ -11,7 +11,8 @@ export default function ControlPanel() {
   async function handleButtonClick() {
     if (config.running === false) {
       // start the process
-      const response = SetRimageParams(config);
+      const tmpConfig = { ...config, resize: config.isResize };
+      const response = await SetRimageParams(tmpConfig);
       if (!response) {
         toast({
           variant: "destructive",

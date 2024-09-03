@@ -72,7 +72,7 @@ export default function GeneralOptions() {
               valueName="width"
               defaultValue={config.resizeWidth}
               isResize={config.isResize}
-              onValueChanged={(value) => (config.resizeHeight = value | 0)}
+              onValueChanged={(value) => (config.resizeWidth = value | 0)}
             />
             <CustomSizeInput
               valueName="height"

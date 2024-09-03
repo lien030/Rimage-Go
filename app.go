@@ -285,13 +285,6 @@ func (a *App) processImage(task Task) bool {
 		rimageCommand = append(rimageCommand, "--width", fmt.Sprintf("%d", rimageParams.Width), "--height", fmt.Sprintf("%d", rimageParams.Height), "--filter", rimageParams.Filter)
 	}
 
-	// Recursive
-	if rimageParams.Recursive {
-		rimageCommand = append(rimageCommand, "-r")
-	} else {
-		rimageCommand = append(rimageCommand, "-o", rimageParams.OutputDir)
-	}
-
 	// Backup
 	if rimageParams.Backup {
 		rimageCommand = append(rimageCommand, "-b")
@@ -302,8 +295,16 @@ func (a *App) processImage(task Task) bool {
 		rimageCommand = append(rimageCommand, "-s", rimageParams.Suffix)
 	}
 
+	// Recursive
+	if rimageParams.Recursive {
+		rimageCommand = append(rimageCommand, "-r")
+	} else {
+		rimageCommand = append(rimageCommand, "-o", rimageParams.OutputDir)
+	}
+
 	// Add file path
 	rimageCommand = append(rimageCommand, task.FilePath)
+	// runtime.EventsEmit(a.ctx, "notify", fmt.Sprintf("cmd: %v", rimageCommand))
 
 	cmd := exec.Command(rimageCommand[0], rimageCommand[1:]...)
 	// hidden window
