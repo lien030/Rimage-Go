@@ -16,6 +16,7 @@ export interface RimageConfig {
   resizeHeight: number;
   filter: FilterType;
   threads: number;
+  suffix: string;
   backup: boolean;
   recursive: boolean;
   format: OutputFormat;

@@ -24,7 +24,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:             "Rimage",
+		Title:             "Rimage-Go",
 		Width:             840,
 		Height:            560,
 		MinWidth:          840,

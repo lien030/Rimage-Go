@@ -148,7 +148,7 @@ function WorkerCard({ worker }: { worker?: ProcessWorker }) {
       <div className="flex justify-center items-center">
         <div className={`w-2 h-2 rounded-full ${getStatusColor(worker)}`} />
       </div>
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center select-none">
         <TaskDetails task={worker?.task} />
       </div>
     </div>

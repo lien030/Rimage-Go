@@ -6,7 +6,11 @@ import { Button } from "./ui/button";
 import useRimageConfig from "@/State";
 import { Input } from "./ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { IsDirectory, DirectoryPicker, GetUserDownloadsDir } from "../../wailsjs/go/main/App";
+import {
+  IsDirectory,
+  DirectoryPicker,
+  GetUserDownloadsDir,
+} from "../../wailsjs/go/main/App";
 import {
   Select,
   SelectContent,
@@ -16,21 +20,22 @@ import {
 } from "@/components/ui/select";
 import { OutputFormat } from "@/type";
 import { useEffect } from "react";
+import isValidFilename from "valid-filename";
 
 function OutputSettings() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const config = useRimageConfig();
 
-  useEffect(()=>{
+  useEffect(() => {
     const setDefaultOutputDir = async () => {
       const path = await GetUserDownloadsDir();
-      if(path) {
+      if (path) {
         config.outputDir = path.dir;
       }
-    }
+    };
     setDefaultOutputDir();
-  },[])
+  }, []);
 
   function CustomDirPicker({
     directory,
@@ -45,9 +50,9 @@ function OutputSettings() {
       // console.log(JSON.stringify(config));
       const response = await DirectoryPicker();
       // console.log(JSON.stringify(response));
-      if(response.result) {
+      if (response.result) {
         const isValid = await IsDirectory(response.dir);
-        if(isValid) {
+        if (isValid) {
           config.outputDir = response.dir;
         } else {
           toast({
@@ -131,24 +136,50 @@ function OutputSettings() {
                 </Label>
               </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <p>{t("format")}</p>
-              <Select
-                defaultValue={config.format}
-                onValueChange={(value) => (config.format = value as OutputFormat)}
-              >
-                <SelectTrigger className="h-8">
-                  <SelectValue placeholder="Filter" />
-                </SelectTrigger>
-                <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
-                  <SelectItem value="mozjpeg">Mozjpeg</SelectItem>
-                  <SelectItem value="png">PNG</SelectItem>
-                  <SelectItem value="oxipng">Oxipng</SelectItem>
-                  <SelectItem value="jpegxl">JPEG XL</SelectItem>
-                  <SelectItem value="webp">WebP</SelectItem>
-                  <SelectItem value="avif">AVIF</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex flex-col gap-1 max-w-[199px]">
+              <div className="flex items-center gap-1">
+                <p className="text-nowrap">{t("format")}</p>
+                <Select
+                  defaultValue={config.format}
+                  onValueChange={(value) =>
+                    (config.format = value as OutputFormat)
+                  }
+                >
+                  <SelectTrigger className="h-8">
+                    <SelectValue placeholder="Filter" />
+                  </SelectTrigger>
+                  <SelectContent onCloseAutoFocus={(e) => e.preventDefault()}>
+                    <SelectItem value="mozjpeg">Mozjpeg(.jpg)</SelectItem>
+                    <SelectItem value="png">PNG</SelectItem>
+                    <SelectItem value="oxipng">Oxipng</SelectItem>
+                    <SelectItem value="jpegxl">JPEG XL</SelectItem>
+                    <SelectItem value="webp">WebP</SelectItem>
+                    <SelectItem value="avif">AVIF</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-1">
+                <p className="text-nowrap">{t("suffix")}</p>
+                <Input
+                  className="h-8 text-end max-w-[162px]"
+                  defaultValue={config.suffix}
+                  onBlur={(e) => {
+                    const suffix = e.target.value;
+                    const valid = isValidFilename(suffix);
+                    if (valid) {
+                      config.suffix = suffix;
+                    } else {
+                      toast({
+                        variant: "destructive",
+                        title: t("suffixError"),
+                        description: t("suffixErrorDescription"),
+                        duration: 2500,
+                      });
+                      e.target.value = config.suffix;
+                    }
+                  }}
+                />
+              </div>
             </div>
           </div>
           <div className="w-full">

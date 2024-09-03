@@ -18,10 +18,6 @@ export function GetUserDownloadsDir() {
   return window['go']['main']['App']['GetUserDownloadsDir']();
 }
 
-export function Greet(arg1) {
-  return window['go']['main']['App']['Greet'](arg1);
-}
-
 export function IsDirectory(arg1) {
   return window['go']['main']['App']['IsDirectory'](arg1);
 }
@@ -36,6 +32,10 @@ export function ParseFileName(arg1) {
 
 export function RemoveWorker(arg1) {
   return window['go']['main']['App']['RemoveWorker'](arg1);
+}
+
+export function SetRimageParams(arg1) {
+  return window['go']['main']['App']['SetRimageParams'](arg1);
 }
 
 export function SetTaskChannel(arg1) {

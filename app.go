@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	rt "runtime"
 	"sync"
-	"time"
+	"syscall"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -45,9 +47,40 @@ type ControlledGoroutine struct {
 	Running bool
 }
 
+type RimageParams struct {
+	Quality      int    `json:"quality"`
+	Quantization int    `json:"quantization"`
+	Dithering    int    `json:"dithering"`
+	Resize       bool   `json:"resize"`
+	Width        int    `json:"resizeWidth"`
+	Height       int    `json:"resizeHeight"`
+	Filter       string `json:"filter"`
+	Threads      int    `json:"threads"`
+	Suffix       string `json:"suffix"`
+	Backup       bool   `json:"backup"`
+	Recursive    bool   `json:"recursive"`
+	Format       string `json:"format"`
+	OutputDir    string `json:"outputDir"`
+}
+
 var tasksChan = make(chan Task, 1024)
 var goroutines = make(map[string]*ControlledGoroutine)
 var wg sync.WaitGroup
+
+var rimageParams = RimageParams{
+	Quality:      75,
+	Quantization: 100,
+	Dithering:    100,
+	Resize:       false,
+	Width:        0,
+	Height:       0,
+	Filter:       "lanczos3",
+	Threads:      4,
+	Backup:       false,
+	Recursive:    false,
+	Format:       "mozjpeg",
+	OutputDir:    "",
+}
 
 // NewApp creates a new App application struct
 func NewApp() *App {
@@ -58,6 +91,11 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	// Perform your setup here
 	a.ctx = ctx
+	result := a.GetUserDownloadsDir()
+	if result.Result {
+		rimageParams.OutputDir = result.Dir
+	}
+	fmt.Println("Running on: ", rt.GOOS)
 }
 
 // domReady is called after front-end resources have been loaded
@@ -78,10 +116,7 @@ func (a *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
+////////////// Dir //////////////
 
 // Check directory exists
 func (a *App) IsDirectory(dir string) bool {
@@ -90,6 +125,15 @@ func (a *App) IsDirectory(dir string) bool {
 		return false
 	}
 	return fileInfo.IsDir()
+}
+
+// Check file exists
+func IsFile(file string) bool {
+	fileInfo, err := os.Stat(file)
+	if err != nil {
+		return false
+	}
+	return !fileInfo.IsDir()
 }
 
 func (a *App) DirectoryPicker() DirectoryPickerResponse {
@@ -145,6 +189,8 @@ func (a *App) GetUserDownloadsDir() DirectoryPickerResponse {
 	}
 }
 
+////////////// Tasks //////////////
+
 func (a *App) SetTaskChannel(tasks []Task) bool {
 	for _, task := range tasks {
 		fmt.Printf("Adding task %s to channel, fileName: %s\n", task.ID, task.FileName)
@@ -159,6 +205,8 @@ func (a *App) ClearTaskChannel() bool {
 	}
 	return true
 }
+
+////////////// Goroutines //////////////
 
 func NewControlledGoroutine(id string, cancel context.CancelFunc) *ControlledGoroutine {
 	return &ControlledGoroutine{
@@ -184,24 +232,6 @@ func stopGoroutine(id string) {
 	}
 }
 
-func (a *App) imageProcessWorker(workerId string, workerCtx context.Context) {
-	for {
-		select {
-		case task := <-tasksChan:
-			fmt.Printf("Worker %s is processing task %s\n", workerId, task.ID)
-			a.setWorkerStatus(workerId, "running", task)
-			processImage(task)
-			a.setWorkerStatus(workerId, "idle", task)
-			a.removeFrontendTask(task)
-			fmt.Println("Tasks channel length: ", len(tasksChan))
-		case <-workerCtx.Done():
-			wg.Done()
-			fmt.Printf("Worker %s is Done.\n", workerId)
-			return
-		}
-	}
-}
-
 func (a *App) NewWorker(worker ProcessWorker) bool {
 	a.startGoroutine(worker.ID)
 	fmt.Println("goroutines length: ", len(goroutines))
@@ -213,10 +243,81 @@ func (a *App) RemoveWorker(id string) bool {
 	return true
 }
 
-func processImage(task Task) {
+func (a *App) imageProcessWorker(workerId string, workerCtx context.Context) {
+	for {
+		select {
+		case task := <-tasksChan:
+			fmt.Printf("Worker %s is processing task %s\n", workerId, task.ID)
+			a.setWorkerStatus(workerId, "running", task)
+			a.processImage(task)
+			a.setWorkerStatus(workerId, "idle", task)
+			a.removeFrontendTask(task)
+			fmt.Println("Tasks channel length: ", len(tasksChan))
+		case <-workerCtx.Done():
+			wg.Done()
+			fmt.Printf("Worker %s is Done.\n", workerId)
+			return
+		}
+	}
+}
+
+func (a *App) processImage(task Task) bool {
 	// Process image
 	fmt.Printf("Processing image %s\n", task.FileName)
-	time.Sleep(3 * time.Second)
+	// time.Sleep(3 * time.Second)
+	rimageExeName := "./rimage"
+	if rt.GOOS == "windows" {
+		rimageExeName = "./rimage.exe"
+	}
+	rimageCommand := []string{
+		rimageExeName,
+		"-q", fmt.Sprintf("%d", rimageParams.Quality),
+		"-f", rimageParams.Format,
+		"-t", fmt.Sprintf("%d", rimageParams.Threads),
+	}
+
+	if rimageParams.Quantization != 100 || rimageParams.Dithering != 100 {
+		rimageCommand = append(rimageCommand, "--quantization", fmt.Sprintf("%d", rimageParams.Quantization), "--dithering", fmt.Sprintf("%d", rimageParams.Dithering))
+	}
+
+	// Resize
+	if rimageParams.Resize {
+		rimageCommand = append(rimageCommand, "--width", fmt.Sprintf("%d", rimageParams.Width), "--height", fmt.Sprintf("%d", rimageParams.Height), "--filter", rimageParams.Filter)
+	}
+
+	// Recursive
+	if rimageParams.Recursive {
+		rimageCommand = append(rimageCommand, "-r")
+	} else {
+		rimageCommand = append(rimageCommand, "-o", rimageParams.OutputDir)
+	}
+
+	// Backup
+	if rimageParams.Backup {
+		rimageCommand = append(rimageCommand, "-b")
+	}
+
+	// Suffix
+	if rimageParams.Suffix != "" {
+		rimageCommand = append(rimageCommand, "-s", rimageParams.Suffix)
+	}
+
+	// Add file path
+	rimageCommand = append(rimageCommand, task.FilePath)
+
+	cmd := exec.Command(rimageCommand[0], rimageCommand[1:]...)
+	// hidden window
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	output, _ := cmd.Output()
+
+	// i don't know how to know if the command is successful or not
+	if len(output) > 0 {
+		fmt.Println(string(output))
+		runtime.EventsEmit(a.ctx, "error", string(output))
+		return false
+	} else {
+		return true
+	}
 }
 
 func (a *App) setWorkerStatus(workerId string, status string, task Task) {
@@ -225,4 +326,24 @@ func (a *App) setWorkerStatus(workerId string, status string, task Task) {
 
 func (a *App) removeFrontendTask(task Task) {
 	runtime.EventsEmit(a.ctx, "removeTask", task.ID)
+}
+
+func (a *App) SetRimageParams(params RimageParams) bool {
+	rimageParams = RimageParams{
+		Quality:      params.Quality,
+		Quantization: params.Quantization,
+		Dithering:    params.Dithering,
+		Resize:       params.Resize,
+		Width:        params.Width,
+		Height:       params.Height,
+		Filter:       params.Filter,
+		Threads:      params.Threads,
+		Suffix:       params.Suffix,
+		Backup:       params.Backup,
+		Recursive:    params.Recursive,
+		Format:       params.Format,
+		OutputDir:    params.OutputDir,
+	}
+	// fmt.Println("Setting rimage params: ", params)
+	return true
 }

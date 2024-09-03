@@ -35,6 +35,10 @@ export default function TaskPool() {
     EventsOn("removeTask", (id: string) => {
       console.log("Removing task", id);
       handleDeleteTask(id);
+      if(config.tasks.length === 0){
+        ClearTaskChannel();
+        config.running = false;
+      }
     });
     return () => {
       OnFileDropOff();

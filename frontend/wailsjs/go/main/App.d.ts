@@ -10,8 +10,6 @@ export function FilePicker():Promise<main.FilesPickerResponse>;
 
 export function GetUserDownloadsDir():Promise<main.DirectoryPickerResponse>;
 
-export function Greet(arg1:string):Promise<string>;
-
 export function IsDirectory(arg1:string):Promise<boolean>;
 
 export function NewWorker(arg1:main.ProcessWorker):Promise<boolean>;
@@ -19,5 +17,7 @@ export function NewWorker(arg1:main.ProcessWorker):Promise<boolean>;
 export function ParseFileName(arg1:string):Promise<string>;
 
 export function RemoveWorker(arg1:string):Promise<boolean>;
+
+export function SetRimageParams(arg1:main.RimageParams):Promise<boolean>;
 
 export function SetTaskChannel(arg1:Array<main.Task>):Promise<boolean>;

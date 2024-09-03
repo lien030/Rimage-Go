@@ -6,9 +6,34 @@ import OutputSettings from "./components/OutputSettings";
 import TaskPool from "./components/TaskPool";
 import Workers from "./components/Workers";
 import ControlPanel from "./components/ControlPanel";
+import { useEffect } from "react";
+import { EventsOff, EventsOn } from "../wailsjs/runtime";
+import { useToast } from "./components/ui/use-toast";
 
 function App() {
   // const { t } = useTranslation();
+  const { toast } = useToast();
+  useEffect(() => {
+    EventsOn("notify", (message: string) => {
+      toast({
+        title: "Debug",
+        description: message,
+        duration: 5000,
+      });
+    });
+    EventsOn("error", (message: string) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: message,
+        duration: 5000,
+      });
+    });
+    return () => {
+      EventsOff("notify");
+      EventsOff("error");
+    };
+  }, []);
 
   return (
     <div className="min-h-screen h-screen min-w-screen w-screen bg-transparent relative">

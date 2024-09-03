@@ -11,6 +11,7 @@ export const defaultData: RimageConfig = {
   resizeHeight: 0,
   filter: "lanczos3",
   threads: 4,
+  suffix: "_comp",
   backup: false,
   recursive: false,
   format: "mozjpeg",

@@ -1,14 +1,26 @@
 import { Square, Play } from "lucide-react";
 import { Button } from "./ui/button";
 import useRimageConfig from "@/State";
-import { ClearTaskChannel, SetTaskChannel } from "../../wailsjs/go/main/App";
+import { ClearTaskChannel, SetRimageParams, SetTaskChannel } from "../../wailsjs/go/main/App";
+import { useToast } from "./ui/use-toast";
 
 export default function ControlPanel() {
   const config = useRimageConfig();
+  const { toast } = useToast();
 
-  function handleButtonClick() {
+  async function handleButtonClick() {
     if (config.running === false) {
       // start the process
+      const response = SetRimageParams(config);
+      if (!response) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to Start",
+          duration: 2500,
+        });
+        return
+      }
       SetTaskChannel(config.tasks);
       config.running = true;
     }else if(config.running === true){
