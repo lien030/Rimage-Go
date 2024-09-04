@@ -1,5 +1,7 @@
 # Rimage Go
 
+![GitHub License](https://img.shields.io/github/license/lien030/Rimage-Go?style=flat&color=blue)
+
 为Rimage设计的GUI软件，通过并行调用提高批量压缩图片的效率。
 拥有现代化界面同时保持较小的软件体积，适合需要快速处理大量图像数据的用户。
 
@@ -24,3 +26,7 @@ Featuring a modern interface while maintaining a small package size, it is suita
 
 1. Learn Rust and refactor with Tauri
    Rust重构万物，R门
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=lien030/Rimage-Go&type=Timeline)](https://star-history.com/#lien030/Rimage-Go&Timeline)
