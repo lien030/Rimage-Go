@@ -6,6 +6,10 @@
 A GUI application designed for Rimage to improve the efficiency of batch image compression through parallel processing.
 Featuring a modern interface while maintaining a small package size, it is suitable for users who need to quickly process large amounts of image data.
 
+## Useage
+
+🚧👷🚧
+
 ## Thanks
 
 **🚀 Core of Rimage-Go 法术之脉**
