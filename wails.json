@@ -6,8 +6,17 @@
   "frontend:build": "yarn run build",
   "frontend:dev:watcher": "yarn run dev",
   "frontend:dev:serverUrl": "auto",
+  "info": {
+    "companyName": "Rimage",
+    "productName": "Rimage-Go",
+    "productVersion": "0.0.1",
+    "copyright": "Copyright © 2024 Rimage-Go. All rights reserved.",
+    "comments": "Based on the open-source SalOne22/Rimage. Features a new GUI for enhanced usability."
+
+  },
+
   "author": {
     "name": "Lien",
-    "email": "lien@lien.su"
+    "email": "admin@lien.su"
   }
 }
