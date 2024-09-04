@@ -22,6 +22,10 @@ export function IsDirectory(arg1) {
   return window['go']['main']['App']['IsDirectory'](arg1);
 }
 
+export function IsWin11() {
+  return window['go']['main']['App']['IsWin11']();
+}
+
 export function NewWorker(arg1) {
   return window['go']['main']['App']['NewWorker'](arg1);
 }

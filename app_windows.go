@@ -7,8 +7,11 @@ import (
 	"os/exec"
 	"path/filepath"
 	rt "runtime"
+	"strconv"
 	"sync"
 	"syscall"
+
+	"golang.org/x/sys/windows/registry"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -347,4 +350,26 @@ func (a *App) SetRimageParams(params RimageParams) bool {
 	}
 	// fmt.Println("Setting rimage params: ", params)
 	return true
+}
+
+func (a *App) IsWin11() bool {
+	if rt.GOOS == "windows" {
+		k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			cb, _, err := k.GetStringValue("CurrentBuild")
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				build, _ := strconv.Atoi(cb)
+				fmt.Println("Windows Build: ", build)
+				if build >= 22000 {
+					return true
+				}
+			}
+		}
+		defer k.Close()
+	}
+	return false
 }

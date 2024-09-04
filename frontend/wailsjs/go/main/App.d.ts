@@ -12,6 +12,8 @@ export function GetUserDownloadsDir():Promise<main.DirectoryPickerResponse>;
 
 export function IsDirectory(arg1:string):Promise<boolean>;
 
+export function IsWin11():Promise<boolean>;
+
 export function NewWorker(arg1:main.ProcessWorker):Promise<boolean>;
 
 export function ParseFileName(arg1:string):Promise<string>;

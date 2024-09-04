@@ -9,9 +9,9 @@
   "info": {
     "companyName": "Rimage",
     "productName": "Rimage-Go",
-    "productVersion": "0.0.1",
+    "productVersion": "0.0.2",
     "copyright": "Copyright © 2024 Rimage-Go. All rights reserved.",
-    "comments": "Based on the open-source SalOne22/Rimage. Features a new GUI for enhanced usability."
+    "comments": "Features a new GUI for enhanced usability."
 
   },
 
