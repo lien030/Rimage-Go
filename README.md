@@ -24,9 +24,11 @@ Featuring a modern interface while maintaining a small package size, it is suita
 
 🚧👷🚧
 
-※ 只在Windows11测试过. Only tested on windows 11
-
 ![MainScreen](/images/p1.png)
+
+1. 添加任务 - 拖拽或点击`➕`	Add Task - Drag&Drop or Click `➕`
+2. 添加Worker - 留意CPU占有率, 量力而行	Add Worker - Watch your CPU usage, act within your means.
+3. ▶️Go
 
 ## Thanks
 
