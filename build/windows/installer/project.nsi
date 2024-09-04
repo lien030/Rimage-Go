@@ -97,7 +97,20 @@ Section
     !insertmacro wails.associateFiles
     !insertmacro wails.associateCustomProtocols
 
-    !insertmacro wails.writeUninstaller
+    ; !insertmacro wails.writeUninstaller
+    WriteUninstaller "$INSTDIR\uninstall.exe"
+
+    SetRegView 64
+    WriteRegStr HKCU "${UNINST_KEY}" "Publisher" "${INFO_COMPANYNAME}"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "${INFO_PRODUCTNAME}"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayVersion" "${INFO_PRODUCTVERSION}"
+    WriteRegStr HKCU "${UNINST_KEY}" "DisplayIcon" "$INSTDIR\${PRODUCT_EXECUTABLE}"
+    WriteRegStr HKCU "${UNINST_KEY}" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+    WriteRegStr HKCU "${UNINST_KEY}" "QuietUninstallString" "$\"$INSTDIR\uninstall.exe$\" /S"
+
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+    WriteRegDWORD HKCU "${UNINST_KEY}" "EstimatedSize" "$0"
 SectionEnd
 
 Section "uninstall"
@@ -106,6 +119,7 @@ Section "uninstall"
     RMDir /r "$APPDATA\${PRODUCT_EXECUTABLE}" # Remove the WebView2 DataPath
 
     RMDir /r $INSTDIR
+    RMDir /r "$APPDATA\${INFO_COMPANYNAME}"
 
     Delete "$SMPROGRAMS\${INFO_PRODUCTNAME}.lnk"
     Delete "$DESKTOP\${INFO_PRODUCTNAME}.lnk"
@@ -113,5 +127,9 @@ Section "uninstall"
     !insertmacro wails.unassociateFiles
     !insertmacro wails.unassociateCustomProtocols
 
-    !insertmacro wails.deleteUninstaller
+    ; !insertmacro wails.deleteUninstaller
+    Delete "$INSTDIR\uninstall.exe"
+
+    SetRegView 64
+    DeleteRegKey HKCU "${UNINST_KEY}"
 SectionEnd
