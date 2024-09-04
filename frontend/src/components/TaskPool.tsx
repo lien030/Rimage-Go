@@ -28,8 +28,8 @@ export default function TaskPool() {
         newPaths: paths,
       });
       if(config.running){
-        ClearTaskChannel();
-        SetTaskChannel(config.tasks);
+        await ClearTaskChannel();
+        await SetTaskChannel(config.tasks);
       }
     };
     OnFileDrop(handleFileDrop, true);
@@ -88,8 +88,8 @@ export default function TaskPool() {
         newPaths: response.files,
       });
       if(config.running){
-        ClearTaskChannel();
-        SetTaskChannel(config.tasks);
+        await ClearTaskChannel();
+        await SetTaskChannel(config.tasks);
       }
     }
   }
@@ -116,6 +116,7 @@ export default function TaskPool() {
           <Button
             className="w-4 h-4 bg-transparent hover:bg-transparent"
             size={"icon"}
+            disabled={config.running}
             onClick={() => handleDeleteTask(task.id)}
           >
             <X size={16} className="text-primary" />
@@ -143,6 +144,7 @@ export default function TaskPool() {
           <Button
             size={"icon"}
             onClick={handleClear}
+            disabled={config.tasks.length === 0 || config.running}
             className="text-muted-foreground bg-background hover:bg-muted-foreground/10 border h-7 w-10 rounded-lg"
           >
             <CookingPot size={16} />

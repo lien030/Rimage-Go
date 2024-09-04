@@ -200,11 +200,9 @@ func (a *App) SetTaskChannel(tasks []Task) bool {
 }
 
 func (a *App) ClearTaskChannel() bool {
-	go func() {
-		for len(tasksChan) > 0 {
-			<-tasksChan
-		}
-	}()
+	for len(tasksChan) > 0 {
+		<-tasksChan
+	}
 	return true
 }
 
