@@ -1,40 +1,22 @@
-# README
+# Rimage Go
 
-## About
+为Rimage设计的GUI软件，通过并行调用提高批量压缩图片的效率。
+拥有现代化界面同时保持较小的软件体积，适合需要快速处理大量图像数据的用户。
 
-This template comes with Vite, React, TypeScript, TailwindCSS and shadcn/ui.
+A GUI application designed for Rimage to improve the efficiency of batch image compression through parallel processing.
+Featuring a modern interface while maintaining a small package size, it is suitable for users who need to quickly process large amounts of image data.
 
-Built with `Wails v2.5.1` and [shadcn's CLI](https://ui.shadcn.com/docs/cli)
+## Thanks
 
-### Using the Template
-```console
-wails init -n project-name -t https://github.com/Mahcks/wails-vite-react-tailwind-shadcnui-ts
-```
+**🚀 Core of Rimage-Go 法术之脉**
 
-```console
-cd frontend
-```
+- [GitHub - SalOne22/rimage: This is CLI tool inspired by squoosh!](https://github.com/SalOne22/rimage)
 
-```console
-npm install
-```
+**💡 Source of inspiration 灵感之源**
 
-### Installing Components
-To install components, use shadcn's CLI tool to install
+- [GitHub - Mikachu2333/rimage_gui: A GUI software use rimage to compress images](https://github.com/Mikachu2333/rimage_gui)
 
-More info here: https://ui.shadcn.com/docs/cli#add
+## Todo List
 
-Example:
-```console
-npx shadcn-ui@latest add [component]
-```
-
-## Live Development
-
-To run in live development mode, run `wails dev` in the project directory. In another terminal, go into the `frontend`
-directory and run `npm run dev`. The frontend dev server will run on http://localhost:34115. Connect to this in your
-browser and connect to your application.
-
-## Building
-
-To build a redistributable, production mode package, use `wails build`.
+1. Learn Rust and refactor with Tauri
+   Rust重构万物，R门
