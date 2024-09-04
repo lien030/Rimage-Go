@@ -2,7 +2,10 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
+	"runtime"
+	"strconv"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -10,6 +13,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
+	"golang.org/x/sys/windows/registry"
 )
 
 //go:embed all:frontend/dist
@@ -21,6 +25,29 @@ var icon []byte
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
+
+	// check windows version
+	windowsTheme := windows.None
+	isWin11 := false
+	if runtime.GOOS == "windows" {
+		k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			cb, _, err := k.GetStringValue("CurrentBuild")
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				build, _ := strconv.Atoi(cb)
+				fmt.Println("Windows Build: ", build)
+				if build >= 22000 {
+					windowsTheme = windows.Mica
+					isWin11 = true
+				}
+			}
+		}
+		defer k.Close()
+	}
 
 	// Create application with options
 	err := wails.Run(&options.App{
@@ -36,7 +63,7 @@ func main() {
 		Frameless:         true,
 		StartHidden:       false,
 		HideWindowOnClose: false,
-		BackgroundColour:  &options.RGBA{R: 0, G: 0, B: 0, A: 0},
+		BackgroundColour:  &options.RGBA{R: 248, G: 249, B: 253, A: 250},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -60,9 +87,9 @@ func main() {
 		// Windows platform specific options
 		Windows: &windows.Options{
 			Theme:                windows.SystemDefault,
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  true,
-			BackdropType:         windows.Mica,
+			WebviewIsTransparent: isWin11,
+			WindowIsTranslucent:  isWin11,
+			BackdropType:         windowsTheme,
 			DisableWindowIcon:    false,
 			// DisableFramelessWindowDecorations: false,
 			WebviewUserDataPath: "",

@@ -95,7 +95,7 @@ func (a *App) startup(ctx context.Context) {
 	if result.Result {
 		rimageParams.OutputDir = result.Dir
 	}
-	fmt.Println("Running on: ", rt.GOOS)
+	// fmt.Println("Running on: ", rt.GOOS)
 }
 
 // domReady is called after front-end resources have been loaded

@@ -36,7 +36,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen h-screen min-w-screen w-screen bg-transparent relative">
+    <div className="min-h-screen h-screen min-w-screen w-screen bg-transparent relative border">
       <TopBar />
       <div className="flex h-full w-full pt-14">
         <div className="flex flex-col gap-4">
