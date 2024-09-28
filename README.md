@@ -20,7 +20,7 @@ Featuring a modern interface while maintaining a small package size, it is suita
 
 ※自测创建20+个Worker压缩一千张5MB左右的图像用时不到一分钟(CPU 24c48t)
 
-## Useage
+## Usage
 
 🚧👷🚧
 
